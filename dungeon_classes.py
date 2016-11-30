@@ -80,7 +80,8 @@ class Floor():
         self.player_position = player_position
         self.sensei_position = sensei_position
         self.stair_position = stair_position
-        self.monster_list = [[5,2,'Blob',1,2,3],[12,4,'Giant spider',3,10,10],[10,3,'Zombie',2,5,4],[1,1,'Bat',1,1,2],[25,10,'Boss',10,200,30]]
+        self.monster_list = [[5,2,'Blob',1,2,3],[12,4,'Giant spider',3,10,10],[10,3,'Zombie',2,5,6],[1,1,'Bat',1,1,2],[25,10,'Guard',10,200,30]]
+        self.door_position = []
 
         
 
