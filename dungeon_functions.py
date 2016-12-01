@@ -5,6 +5,7 @@ import sys
 import time
 import os
 from dungeon_classes import *
+obstacle_damage = 15
 
 def use_stairs(floor,user):
     user.floor += 1
@@ -202,7 +203,7 @@ def move_player(floor,user):
             if floor.player_position in floor.monster_positions:
                 fight(floor,user)
             if floor.player_position == floor.door_position:
-                fight(floor,user)
+                #fight(floor,user) # Is this what caused 2 door Gaurds?
                 leave_dungeon(floor,user)
         else:
             print "You hit a wall... Try again. "
@@ -220,7 +221,7 @@ def move_player(floor,user):
             if floor.player_position == floor.sensei_position:
                 use_sensei(user)
             if floor.player_position == floor.door_position:
-                fight(floor,user)
+                #fight(floor,user)
                 leave_dungeon(floor,user)
         else:
             print "That's a WALL, numbskull! Try again. "
@@ -238,7 +239,7 @@ def move_player(floor,user):
             if floor.player_position == floor.sensei_position:
                 use_sensei(user)
             if floor.player_position == floor.door_position:
-                fight(floor,user)
+                #fight(floor,user)
                 leave_dungeon(floor,user)
         else:
             print "Another wall. Rats! Try again. "
@@ -255,7 +256,7 @@ def move_player(floor,user):
             if floor.player_position == floor.sensei_position:
                 use_sensei(user)
             if floor.player_position == floor.door_position:
-                fight(floor,user)
+                #fight(floor,user)
                 leave_dungeon(floor,user)
         else:
             print "You realize you're trying to walk through a wall, right? Try again. "
@@ -264,28 +265,36 @@ def move_player(floor,user):
             move_player(floor,user)
 
 def grab_item(outdoors,user):
-    print 'You grabbed an item'
-    # element = where playerposition == item
-    # delete item[element] #or in running() just delete item@player position
+    print 'You grabbed an item.'
+    r = np.random.rand()
+    if r < .6:
+        user.gain_money(1)
+        print 'The item was a gold piece! Not bad!'
+    if r >= .6 and r <= .85:
+        user.health_potions += 1
+        print 'The item was a health potion! Nice!'
+    if r > .85:
+        user.superboots = True
+        print 'YOU FOUND SUPERBOOTS! You can easily escape now!'
     time.sleep(2)
 def hit_obstacle(outdoors,user):
-    print ' you hit an obstacle'
+    user.lose_health(obstacle_damage+user.defense) # defense doesn't stop this damage
+    print 'You hit an obstacle. Ouch, that hurts!'
     time.sleep(2)
 def running(outdoors,user): # analagous to "move_player" for inside dungeon
+    header(user)
     display(outdoors.gridsize_x,outdoors.gridsize_y,outdoors)
     print 'You are on the run from evil! '
     print 'You can now jump over obstacles. '
     print 'Pick up objects while running, or just escape! '
-    #header(user)
-    #legend(user)
-    #display(floor.gridsize_x,floor.gridsize_y,floor)
+    print ''
+    print ''
     print 'What would you like to do?'
     print '[w] Move up  '
     print '[s] Move down'
     print '[d] Jump   '
-    print 'obst', outdoors.obstacle_locations
-    print 'items', outdoors.item_locations
-    print 'player', outdoors.player_position
+    if user.superboots:
+        print '[B] Use superboots to outrun the evil!'
     
     obst_num = np.random.randint(1,3)
     item_rand = np.random.rand()
@@ -293,7 +302,6 @@ def running(outdoors,user): # analagous to "move_player" for inside dungeon
         item_num = 1
     else:
         item_num = 0
-
 
     move = raw_input()
 
@@ -344,8 +352,19 @@ def running(outdoors,user): # analagous to "move_player" for inside dungeon
         if outdoors.player_position in outdoors.obstacle_locations:
             hit_obstacle(outdoors,user)        
 
-
-
+    if move == 'b' or move == 'B':
+        while outdoors.player_position[0] < outdoors.gridsize_x-1:
+            outdoors.player_position[0] +=1
+            outdoors.advance_terrain(0,0)
+            os.system('clear')
+            display(outdoors.gridsize_x,outdoors.gridsize_y,outdoors)
+            time.sleep(0.5)
+        #os.system('clear')
+        #print 'You escaped the evil for good!'
+        #print 'Nice work, Hotshot! '
+        #time.sleep(3)
+        #return #
+        leave_outdoors(outdoors,user)
     
 
 def display(gridsize_x, gridsize_y,floor):
@@ -446,24 +465,46 @@ def display(gridsize_x, gridsize_y,floor):
 def draw(name,user): # name_of_monster= enemy.name
     if name == 'Stairs':
         print 'You stumbled upon a raggedy staircase. You naively decide to ascend.'
-        print ''
-        print ''
-        print '      __'
-        print '_____|'
-        time.sleep(2)
+        print '            '
+        print '            '
+        print '            '
+        print '            '
+        print '  x         '
+        print ' /|\    ____'
+        print '_/ \___|    '
+        time.sleep(1.5)
         os.system('clear')
-        print ''
-        print '         __'
-        print '      __|'    
-        print '_____|'
-        time.sleep(2)
+        print 'You stumbled upon a raggedy staircase. You naively decide to ascend.'
+        print '                   '
+        print '                   '
+        print '                   '
+        print '          o        '
+        print '         /|\   ____'
+        print '        _/ \__|    '    
+        print '_______|'
+        time.sleep(1.5)
         os.system('clear')
-        print '            _______'
-        print '         __|'
-        print '      __|'    
-        print '_____|'
+        print 'You stumbled upon a raggedy staircase. You naively decide to ascend.'
+        print '                             '
+        print '                             '
+        print '                 o           '
+        print '                /|\  _______ '
+        print '               _/ \_|'
+        print '        ______|'    
+        print '_______|'
         print ''
-        print 'You ascended to floor ' + str(user.floor) +'.'
+        time.sleep(1.5)
+        os.system('clear')
+        print 'You stumbled upon a raggedy staircase. You naively decide to ascend.'
+        print '                             __ '
+        print '                       o    |  |'
+        print '                      /|\   | .|'
+        print '                     _/ \___|__|'
+        print '               _____|'
+        print '        ______|'    
+        print '_______|'
+        print ''
+        print 'You reached floor ' + str(user.floor) +'.'
     if name == 'Sensei':
         print '     _     '
         print '   /   \   '
@@ -547,7 +588,13 @@ def draw(name,user): # name_of_monster= enemy.name
         print ' If your health reaches 0, you lose! '
         print ' '
         
-    
+def leave_outdoors(floor,user):
+    os.system('clear')
+    header(user)
+    print 'You were able to escape the fields. '
+    time.sleep(2)
+    user.outside=False
+    user.archery=True
 def leave_dungeon(floor,user):
     os.system('clear')
     header(user)

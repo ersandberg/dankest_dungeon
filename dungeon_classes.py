@@ -23,6 +23,7 @@ class player():
         self.local_high_score = local_high_score
         self.in_dungeon = True
         self.outside = False
+        self.superboots = False
 
     def gain_exp(self,value):
         self.exp += value
@@ -37,7 +38,7 @@ class player():
         if self.defense >= loss_of_health:
             return
         self.health -= (loss_of_health-self.defense)
-        print 'Your health is ' + str(self.health)
+        print 'You lost ' + str(loss_of_health) + ' health. '
         
     def gain_health(self,gain_of_health):
         if self.health == 100:
@@ -175,27 +176,20 @@ class Outdoors():
 #        self.generate(number_obstacles,number_items)
 
         for obstacle_counter, position in enumerate(self.obstacle_locations):
-
             if position[0] < 1: # ZERO OR ONE
                 del(self.obstacle_locations[obstacle_counter])
-            
-
-            self.obstacle_locations[obstacle_counter][0] -= 1
-
-
-
+            try:
+                self.obstacle_locations[obstacle_counter][0] -= 1
+            except:
+                pass
         for item_counter, position in enumerate(self.item_locations):
             if position[0] < 1: # ZERO OR ONE
                 del(self.item_locations[item_counter])
             try:
                 self.item_locations[item_counter][0] -= 1
             except:
-                pass
-
-
-                
+                pass                
         self.generate(number_obstacles,number_items)
 
-        #os.sysem('clear')
         
         
