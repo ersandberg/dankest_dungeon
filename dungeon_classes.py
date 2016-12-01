@@ -21,6 +21,8 @@ class player():
         self.maxexp = maxexp # exp needed to level up
         self.keys = keys
         self.local_high_score = local_high_score
+        self.in_dungeon = True
+        self.outside = False
 
     def gain_exp(self,value):
         self.exp += value
@@ -145,3 +147,55 @@ class Sensei():
         else:
             print 'You have already learned more defensive tactics than I, young master. '
             self.teach_defense -= 1
+
+
+class Outdoors():
+    def __init__(self):
+        self.gridsize_x = 10
+        self.gridsize_y = 5
+        self.player_position = [0,0]
+        self.obstacle_locations = [] 
+        self.item_locations = []
+
+
+    def generate(self,number_obstacles,number_items): # obstacles start at x=gridsize_x and work their way left
+        for i in range(number_obstacles):
+            self.obstacle_locations.append([self.gridsize_x-1,np.random.randint(0,self.gridsize_y)])
+            if len(self.obstacle_locations) > 1:
+                while self.obstacle_locations[-1] in self.obstacle_locations[:-1]: #ensure no duplicate occupancy
+                    del(self.obstacle_locations[-1])
+                    self.obstacle_locations.append([self.gridsize_x-1,np.random.randint(0,self.gridsize_y)])
+        for i in range(number_items):
+            self.item_locations.append([self.gridsize_x-1,np.random.randint(0,self.gridsize_y)])
+            while self.item_locations[-1] in self.obstacle_locations: #only works for 1 item, 1 obst
+                del(self.item_locations[-1])
+                self.item_locations.append([self.gridsize_x-1,np.random.randint(0,self.gridsize_y)])
+                
+    def advance_terrain(self,number_obstacles,number_items):
+#        self.generate(number_obstacles,number_items)
+
+        for obstacle_counter, position in enumerate(self.obstacle_locations):
+
+            if position[0] < 1: # ZERO OR ONE
+                del(self.obstacle_locations[obstacle_counter])
+            
+
+            self.obstacle_locations[obstacle_counter][0] -= 1
+
+
+
+        for item_counter, position in enumerate(self.item_locations):
+            if position[0] < 1: # ZERO OR ONE
+                del(self.item_locations[item_counter])
+            try:
+                self.item_locations[item_counter][0] -= 1
+            except:
+                pass
+
+
+                
+        self.generate(number_obstacles,number_items)
+
+        #os.sysem('clear')
+        
+        

@@ -23,12 +23,11 @@ def use_stairs(floor,user):
     if user.floor == 5: # last level, no stairs, only 1 guard monster
         floor.stair_position = []
         floor.door_position = [0,0]
-        floor.monster_positions = [0,0]
+        floor.monster_positions = [[0,0]]
     
     os.system('clear')
 
-    print 'You stumbled upon a raggedy staircase. You naively decide to ascend.'
-    time.sleep(2)
+    #time.sleep(2)
     os.system('clear')
     # animation
     draw('Stairs',user) 
@@ -264,7 +263,91 @@ def move_player(floor,user):
             os.system('clear')
             move_player(floor,user)
 
+def grab_item(outdoors,user):
+    print 'You grabbed an item'
+    # element = where playerposition == item
+    # delete item[element] #or in running() just delete item@player position
+    time.sleep(2)
+def hit_obstacle(outdoors,user):
+    print ' you hit an obstacle'
+    time.sleep(2)
+def running(outdoors,user): # analagous to "move_player" for inside dungeon
+    display(outdoors.gridsize_x,outdoors.gridsize_y,outdoors)
+    print 'You are on the run from evil! '
+    print 'You can now jump over obstacles. '
+    print 'Pick up objects while running, or just escape! '
+    #header(user)
+    #legend(user)
+    #display(floor.gridsize_x,floor.gridsize_y,floor)
+    print 'What would you like to do?'
+    print '[w] Move up  '
+    print '[s] Move down'
+    print '[d] Jump   '
+    print 'obst', outdoors.obstacle_locations
+    print 'items', outdoors.item_locations
+    print 'player', outdoors.player_position
+    
+    obst_num = np.random.randint(1,3)
+    item_rand = np.random.rand()
+    if item_rand > .9:
+        item_num = 1
+    else:
+        item_num = 0
+
+
+    move = raw_input()
+
+    if move == '':
+        outdoors.advance_terrain(obst_num,item_num) # create obstacles & items      
+        if outdoors.player_position in outdoors.item_locations:
+            grab_item(outdoors,user)
+        if outdoors.player_position in outdoors.obstacle_locations:
+            hit_obstacle(outdoors,user)
             
+    if move == 'w' or move == 'W': # up
+        outdoors.advance_terrain(obst_num,item_num) 
+        if outdoors.player_position[1] !=0:
+            outdoors.player_position[1] -= 1
+            if outdoors.player_position in outdoors.item_locations:
+                grab_item(outdoors,user)
+            if outdoors.player_position in outdoors.obstacle_locations:
+                hit_obstacle(outdoors,user)
+        else:
+            print "Can't go out of bounds! Try again. "
+            time.sleep(2)
+            os.system('clear')
+            running(outdoors,user)
+
+            
+    if move == 's' or move == 'S': # down
+        outdoors.advance_terrain(obst_num,item_num) # create obstacles & items
+
+        if outdoors.player_position[1] != outdoors.gridsize_y-1:
+            outdoors.player_position[1] += 1
+            if outdoors.player_position in outdoors.item_locations:
+                grab_item(outdoors,user)
+            if outdoors.player_position in outdoors.obstacle_locations:
+                hit_obstacle(outdoors,user)
+            
+        else:
+            print "You realize you're trying to walk out of bounds, right? Try again. "
+            time.sleep(2)
+            os.system('clear')
+            running(outdoors,user)
+        
+
+    if move == 'd' or move == 'D': # jump over obstacle
+        outdoors.advance_terrain(obst_num,item_num)
+        outdoors.advance_terrain(obst_num,item_num)
+        if outdoors.player_position in outdoors.item_locations:
+            grab_item(outdoors,user)
+        if outdoors.player_position in outdoors.obstacle_locations:
+            hit_obstacle(outdoors,user)        
+
+
+
+    
+
 def display(gridsize_x, gridsize_y,floor):
     # create base grid
     top   = ' _ '*floor.gridsize_x
@@ -272,21 +355,49 @@ def display(gridsize_x, gridsize_y,floor):
     array = []
     for i in range(floor.gridsize_y):
         array.append(row)
-    
-    # place monster markers
-    try:
-        for position in floor.monster_positions:
+
+    try: #floor here would be outdoors
+        for position in floor.obstacle_locations:
             x = position[0]
             y = position[1]
+
+            listed = list(array[y])
+            listed[3*x+1] = 'A'
+            if x < 1: #do not display if at x=0, cannot hit that obstacle
+                listed[3*x+1] = '_'
+            array[y] = "".join(listed)
+    except:
+        pass
+
+    try: #floor here would be outdoors
+        for position in floor.item_locations:
+            x = position[0]
+            y = position[1]
+            listed = list(array[y])
+            listed[3*x+1] = 'i'
+            if x < 1: #do not display if at x=0, cannot hit that obstacle
+                listed[3*x+1] = '_'
+            array[y] = "".join(listed)
+    except:
+        pass
+    # place monster markers
+    try:
+        if len(floor.monster_positions) != 1:
+            for position in floor.monster_positions:
+                x = position[0]
+                y = position[1]
+                listed = list(array[y])
+                listed[3*x+1] = 'o'
+                array[y] = "".join(listed)
+        else:
+            x = floor.monster_positions[0][0]
+            y = floor.monster_positions[0][1]
             listed = list(array[y])
             listed[3*x+1] = 'o'
             array[y] = "".join(listed)
     except:
-        x = floor.monster_positions[0]
-        y = floor.monster_positions[1]
-        listed = list(array[y])
-        listed[3*x+1] = 'o'
-        array[y] = "".join(listed)
+        pass
+
         
     # place sensei marker
     try:
@@ -334,6 +445,7 @@ def display(gridsize_x, gridsize_y,floor):
 
 def draw(name,user): # name_of_monster= enemy.name
     if name == 'Stairs':
+        print 'You stumbled upon a raggedy staircase. You naively decide to ascend.'
         print ''
         print ''
         print '      __'
@@ -424,6 +536,7 @@ def draw(name,user): # name_of_monster= enemy.name
         print '                      '
         print '                      '
     if name == 'Instructions':
+        os.system('clear')
         print ' GOAL: Get to floor five and escape the dungeon. '
         print ' You will need to get stronger to leave the fifth floor. '
         print ' Fight monsters to get stronger. '
@@ -439,7 +552,10 @@ def leave_dungeon(floor,user):
     os.system('clear')
     header(user)
     print 'You make it out of the dungeon alive'
-    victory(user)
+    time.sleep(2)
+    user.in_dungeon = False
+    user.outside = True
+    #victory(user)
 
 def header(user):
     print 'Floor: ', user.floor, 'Level: ', user.level, 'Experience: ', str(user.exp) + '/' + str(user.maxexp), 'Damage: ', user.damage, 'Defense: ', user.defense, 'Health: ', user.health, 'Gold: ', user.money, 'Health potions: ', user.health_potions
@@ -458,6 +574,7 @@ def legend(user):
 def victory(user):
     print 'High score: ', user.score
     #np.savetxt('character_save.txt', ) delete character save file
+    np.savetxt('local_high_score.txt', [user.score])
     time.sleep(3)
     os.system('clear')
     sys.exit()

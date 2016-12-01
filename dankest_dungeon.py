@@ -43,6 +43,9 @@ floor_starting_values = [gridsize_x,gridsize_y, np.random.randint(min(dimensions
 floor = Floor(*floor_starting_values)
 floor.generate_monsters()
 
+outdoors = Outdoors()
+#outdoors.generate()
+
 
 #Initialize the game
 os.system('clear')
@@ -72,6 +75,13 @@ else:
 os.system('clear')
 print 'RUN'
 time.sleep(2)
-while True:
+
+#user.in_dungeon = False # For testing
+#user.outside = True
+while user.in_dungeon: # dungeon sequence
     os.system('clear')
     move_player(floor,user)
+while user.outside:
+    os.system('clear')
+    running(outdoors,user)
+
