@@ -281,6 +281,8 @@ def grab_item(outdoors,user):
 def hit_obstacle(outdoors,user):
     user.lose_health(obstacle_damage+user.defense) # defense doesn't stop this damage
     print 'You hit an obstacle. Ouch, that hurts!'
+    if user.health <= 0:
+        endgame(user)
     time.sleep(2)
 def running(outdoors,user): # analagous to "move_player" for inside dungeon
     header(user)
