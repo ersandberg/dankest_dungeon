@@ -5,6 +5,7 @@ import time
 import os
 from dungeon_classes import *
 from dungeon_functions import *
+from dankest_storyline import *
 
 
 # define character attributes
@@ -25,7 +26,7 @@ except:
     local_high_score = 0
     
 # combine into one array for simplicity
-character_starting_values = [starting_level,start_health,start_damage,start_defense, start_money, start_potions,first_floor,start_score,start_exp,start_maxexp,start_keys,local_high_score]
+character_starting_values = [starting_level,start_health,start_damage,start_defense, start_money, start_potions,first_floor,start_score,start_exp,start_maxexp,start_keys]
 
 
 # define floor attributes
@@ -44,19 +45,10 @@ floor = Floor(*floor_starting_values)
 floor.generate_monsters()
 
 outdoors = Outdoors()
-#outdoors.generate()
 
 
 #Initialize the game
-os.system('clear')
-print 'You are in the dankest of dungeons.'
-time.sleep(1)
-print 'What will you do?'
-time.sleep(1)
-print 'How will you get out?!'
-time.sleep(1)
-print 'A distant voice screams out for help...'
-time.sleep(1)
+intro()
 print '----------------'
 print 'Would you like to load a saved character?'
 print '[Y] Yes'
@@ -71,17 +63,18 @@ if yes_or_no == 'y':
         user = player(*character_starting_values)
 else:
      user = player(*character_starting_values)
+user.local_high_score = local_high_score
 
 os.system('clear')
 print 'RUN'
 time.sleep(2)
 
 #user.in_dungeon = False # For testing
-#user.outside = True
+#user.outside = True # for testing
 while user.in_dungeon: # dungeon sequence
     os.system('clear')
     move_player(floor,user)
-while user.outside:
+while user.outside: # outdoor sequence
     os.system('clear')
     running(outdoors,user)
 if user.archery:

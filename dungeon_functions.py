@@ -286,6 +286,7 @@ def hit_obstacle(outdoors,user):
     time.sleep(2)
 def running(outdoors,user): # analagous to "move_player" for inside dungeon
     header(user)
+    outdoors_legend(user)
     display(outdoors.gridsize_x,outdoors.gridsize_y,outdoors)
     print 'You are on the run from evil! '
     print 'You can now jump over obstacles. '
@@ -355,12 +356,15 @@ def running(outdoors,user): # analagous to "move_player" for inside dungeon
         if outdoors.player_position in outdoors.obstacle_locations:
             hit_obstacle(outdoors,user)        
 
-    if move == 'b' or move == 'B':
+    if move == 'b' and user.superboots == True or move == 'B' and user.superboots == True:
         while outdoors.player_position[0] < outdoors.gridsize_x-1:
             outdoors.player_position[0] +=1
             outdoors.advance_terrain(0,0)
             os.system('clear')
+            header(user)
+            outdoors_legend(user)
             display(outdoors.gridsize_x,outdoors.gridsize_y,outdoors)
+            print 'GOTTA GO FAST!'
             time.sleep(0.5)
         #os.system('clear')
         #print 'You escaped the evil for good!'
@@ -621,6 +625,8 @@ def legend(user):
     #if user.floor == 5:
         #print 'Player = X , Stairs = s , Monsters = o , Wise old men = w , DOOR = d '
     print 'Player = X , Stairs = s , Monsters = o , Wise old men = w , door = d'
+def outdoors_legend(user):
+    print 'Player = X , Obstacles = A , Items = i '
 def victory(user):
     print 'High score: ', user.score
     #np.savetxt('character_save.txt', ) delete character save file

@@ -7,7 +7,7 @@ import os
 
 
 class player():
-    def __init__(self,level,health,damage,defense,money,health_potions,floor,score,exp,maxexp,keys,local_high_score):
+    def __init__(self,level,health,damage,defense,money,health_potions,floor,score,exp,maxexp,keys):
         self.level=level
         self.health=health
         self.damage=damage
@@ -20,7 +20,7 @@ class player():
         self.exp = exp
         self.maxexp = maxexp # exp needed to level up
         self.keys = keys
-        self.local_high_score = local_high_score
+        self.local_high_score = 0
         self.in_dungeon = True
         self.outside = False
         self.superboots = False
@@ -38,7 +38,7 @@ class player():
         if self.defense >= loss_of_health:
             return
         self.health -= (loss_of_health-self.defense)
-        print 'You lost ' + str(loss_of_health) + ' health. '
+        print 'You lost ' + str(loss_of_health-self.defense) + ' health. '
         
     def gain_health(self,gain_of_health):
         if self.health == 100:
