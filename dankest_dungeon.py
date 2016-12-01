@@ -84,4 +84,7 @@ while user.in_dungeon: # dungeon sequence
 while user.outside:
     os.system('clear')
     running(outdoors,user)
+if user.archery:
+    victory(user)
+        
 

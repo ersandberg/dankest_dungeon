@@ -267,6 +267,7 @@ def move_player(floor,user):
 def grab_item(outdoors,user):
     print 'You grabbed an item.'
     r = np.random.rand()
+    user.add_score(75)
     if r < .6:
         user.gain_money(1)
         print 'The item was a gold piece! Not bad!'
