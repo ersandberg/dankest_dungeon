@@ -472,7 +472,7 @@ def draw(name,user): # name_of_monster= enemy.name
         print '            '
         print '            '
         print '            '
-        print '  x         '
+        print '  o         '
         print ' /|\    ____'
         print '_/ \___|    '
         time.sleep(1.5)
