@@ -49,35 +49,45 @@ outdoors = Outdoors()
 
 #Initialize the game
 intro()
+user = player(*load_character(character_starting_values).astype(int))
+
+'''
 print '----------------'
 print 'Would you like to load a saved character?'
 print '[Y] Yes'
 print '[N] No'
-yes_or_no = raw_input()
-if yes_or_no == 'y':
-    try:
-        load_character = np.loadtxt('character_save.txt')
-        user = player(*load_character.astype(int))
-    except:
-        print 'Unable to load character. Starting a new game.'
+user = player(*load_character(character_starting_values))
+yes_or_no = ''
+while yes_or_no == '': # in case person spams return during intro
+    yes_or_no = raw_input()
+    if yes_or_no == 'y' or yes_or_no == 'Y':
+        try:
+            load_character = np.loadtxt('character_save.txt')
+            user = player(*load_character.astype(int))
+            print 'Loading saved character. '
+        except:
+            print 'Unable to load character. Starting a new game.'
+            user = player(*character_starting_values)
+    if yes_or_no == 'n' or yes_or_no == 'N':
         user = player(*character_starting_values)
-else:
-     user = player(*character_starting_values)
+        print 'Starting a new character.'
+        time.sleep(2)
+'''
 user.local_high_score = local_high_score
-
 os.system('clear')
 print 'RUN'
 time.sleep(2)
 
-#user.in_dungeon = False # For testing
-#user.outside = True # for testing
+user.in_dungeon = False # For testing
+user.outside = True # for testing
 while user.in_dungeon: # dungeon sequence
     os.system('clear')
     move_player(floor,user)
+outside_intro()
 while user.outside: # outdoor sequence
     os.system('clear')
     running(outdoors,user)
-if user.archery:
-    victory(user)
+while user.archery:
+    archery_intro()
         
 

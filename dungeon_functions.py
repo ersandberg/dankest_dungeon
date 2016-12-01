@@ -50,6 +50,7 @@ def use_sensei(user):
     print '[2] Increase damage (2 gold).'
     print '[3] Increase defense (2 gold).'
     print '[4] Leave.'
+    print '[5] "What are you doing here?" '
     action = raw_input()
 
     if action == '1':
@@ -64,11 +65,17 @@ def use_sensei(user):
         sensei.lose_teach_defense(user)
         time.sleep(2)
         use_sensei(user)
-    if action =='4':
+    if action == '4':
         print 'You leave the sensei alone. He whispers quietly to himself: "Finally..."'
         time.sleep(2.5)
         return
-
+    if action == '5':
+        print 'A long long time ago I was standing on the cliffs above my hometown.'
+        time.sleep(2)
+        print 'I fell down a hole as I made my way back from the cliffs. '
+        time.sleep(2)
+        print 'I grew strong in this dungeon, but never strong enough to beat the Guard on level 5...'
+        time.sleep(2.5)
 
 
 def fight(floor,user):
@@ -174,7 +181,7 @@ def move_player(floor,user):
 
     if move == 'c' or move == 'C':
         draw('Instructions',user)
-        goback = raw_input('Press any key, then return to go back. ')
+        goback = raw_input('Press [return] to go back. ')
         if goback:
             return
         
@@ -268,13 +275,13 @@ def grab_item(outdoors,user):
     print 'You grabbed an item.'
     r = np.random.rand()
     user.add_score(75)
-    if r < .6:
+    if r < .7:
         user.gain_money(1)
         print 'The item was a gold piece! Not bad!'
-    if r >= .6 and r <= .85:
+    if r >= .7 and r <= .9:
         user.health_potions += 1
         print 'The item was a health potion! Nice!'
-    if r > .85:
+    if r > .9:
         user.superboots = True
         print 'YOU FOUND SUPERBOOTS! You can easily escape now!'
     time.sleep(2)
@@ -296,7 +303,8 @@ def running(outdoors,user): # analagous to "move_player" for inside dungeon
     print 'What would you like to do?'
     print '[w] Move up  '
     print '[s] Move down'
-    print '[d] Jump   '
+    print '[d] Jump     '
+    print '[return] Stay'
     if user.superboots:
         print '[B] Use superboots to outrun the evil!'
     
@@ -478,7 +486,7 @@ def draw(name,user): # name_of_monster= enemy.name
         print '            '
         print '  o         '
         print ' /|\    ____'
-        print '_/ \___|    '
+        print '_/ l___|    '
         time.sleep(1.5)
         os.system('clear')
         print 'You stumbled upon a raggedy staircase. You naively decide to ascend.'
@@ -487,7 +495,7 @@ def draw(name,user): # name_of_monster= enemy.name
         print '                   '
         print '          o        '
         print '         /|\   ____'
-        print '        _/ \__|    '    
+        print '        _/ l__|    '    
         print '_______|'
         time.sleep(1.5)
         os.system('clear')
@@ -496,7 +504,7 @@ def draw(name,user): # name_of_monster= enemy.name
         print '                             '
         print '                 o           '
         print '                /|\  _______ '
-        print '               _/ \_|'
+        print '               _/ l_|'
         print '        ______|'    
         print '_______|'
         print ''
@@ -506,7 +514,7 @@ def draw(name,user): # name_of_monster= enemy.name
         print '                             __ '
         print '                       o    |  |'
         print '                      /|\   | .|'
-        print '                     _/ \___|__|'
+        print '                     _/ l___|__|'
         print '               _____|'
         print '        ______|'    
         print '_______|'
@@ -585,20 +593,20 @@ def draw(name,user): # name_of_monster= enemy.name
         print '                      '
     if name == 'Instructions':
         os.system('clear')
-        print ' GOAL: Get to floor five and escape the dungeon. '
-        print ' You will need to get stronger to leave the fifth floor. '
-        print ' Fight monsters to get stronger. '
-        print ' Learn from old wise men to get stronger. '
-        print ' Take the stairs to fight more monsters. '
-        print ' You lose health when fighting monsters. '
-        print ' Use health potions to get back some health if you need to. '
-        print ' If your health reaches 0, you lose! '
+        print 'GOAL: Get to floor five and escape the dungeon. '
+        print 'You will need to get stronger to leave the fifth floor. '
+        print 'Fight monsters to get stronger. '
+        print 'Learn from old wise men to get stronger. '
+        print 'Take the stairs to fight more monsters. '
+        print 'You lose health when fighting monsters. '
+        print 'Use health potions to get back some health if you need to. '
+        print 'If your health reaches 0, you lose! '
         print ' '
         
 def leave_outdoors(floor,user):
     os.system('clear')
     header(user)
-    print 'You were able to escape the fields. '
+    print 'You were able to escape from the giant. '
     time.sleep(2)
     user.outside=False
     user.archery=True
@@ -644,3 +652,35 @@ def endgame(user):
     np.savetxt('local_high_score.txt', [user.score])
     os.system('clear')
     sys.exit()
+
+def load_character(character_starting_values):
+    os.system('clear')
+    print ' T H E   D A N K E S T   D U N G E O N '
+    print '----------------'
+    print 'Would you like to load a saved character?'
+    print '[Y] Yes'
+    print '[N] No'
+    yes_or_no = ''
+    
+    yes_or_no = raw_input()
+    if yes_or_no != 'y' and yes_or_no != 'Y' and yes_or_no != 'n' and yes_or_no != 'N':
+        return load_character(character_starting_values)
+    if yes_or_no == 'y' or yes_or_no == 'Y':
+        try:
+            character = np.loadtxt('character_save.txt')
+            print 'Loading saved character. '
+            return character
+        except:
+            print 'Unable to load character. Starting a new game.'
+            character = character_starting_values
+            return character
+
+    if yes_or_no == 'n' or yes_or_no == 'N':
+        character = character_starting_values
+        print 'Starting a new character.'
+        return character
+        time.sleep(2)
+
+
+
+    
