@@ -7,6 +7,7 @@ import os
 from dungeon_classes import *
 from dungeon_functions import *
 from dankest_storyline import *
+#from test.py import *
 
 
 # define character attributes
@@ -46,19 +47,20 @@ floor = Floor(*floor_starting_values)
 floor.generate_monsters()
 
 outdoors = Outdoors()
+haybail = Haybail()
 
 
 #Initialize the game
 
-intro()
+#intro()
 user = player(*load_character(character_starting_values))
 
 user.local_high_score = local_high_score
 os.system('clear')
-#user.archery=True # for testing
-#user.in_dungeon = False # For testing
-#user.outside = False # for testing
-
+user.archery=True # for testing
+user.in_dungeon = False # For testing
+user.outside = False # for testing
+'''
 while user.in_dungeon: # dungeon sequence
     os.system('clear')
     move_player(floor,user)
@@ -67,14 +69,16 @@ while user.outside: # outdoor sequence
     os.system('clear')
     running(outdoors,user)
 archery_intro()    
+'''
 
-#while user.archery:
-haybail = Haybail()
-while user.haybailchamp == False:
 
-    show_target(user,haybail)
 
-print 'DID I GET HERE'
+
+
+show_target(user,haybail)
+# got past the haybail
+os.system('clear')
+print 'YOU ARE THE HAYBAIL CHAMP!'
 time.sleep(3)
 if user.haybailchamp:
     #os.system('clear')

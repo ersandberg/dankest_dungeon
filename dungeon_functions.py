@@ -10,7 +10,7 @@ from dungeon_classes import *
 obstacle_damage = 15
 
 
-'''# --- From moisesvego on StackOverflow
+'''# --- From pontus on StackOverflow
 import sys, select
 
 print "You have ten seconds to answer!"
@@ -450,9 +450,8 @@ def distance(point1,point2):
 
 # If True, Give user a chance to press enter
 # If two seconds pass, remove chance, start over
-
 def show_target(user,enemy):
-    if user.haybailchamp == False:
+        anidle = 0.0
         wind(user)
         os.system('clear')
         display_arrow(user)
@@ -460,50 +459,53 @@ def show_target(user,enemy):
         print str(enemy.name) + ' has ' + str(enemy.health) + ' health. '
         center = [0,3]
         windtime = np.random.rand()
-        thread = threading.Timer(windtime,show_target, [user,enemy])
-        thread.start()
         print ''
         print ''
-        print '[return] Shoot the arrow! (Only press once, please.)'
+        print '[return] Shoot the arrow! '
+        
+        while enemy.health > 0:
+                time.sleep(0.01)
 
+                incoming = select.select([sys.stdin],[],[],0.0)[0]
+                if len(incoming) > 0: # shot the arrow
+                        anidle = 0.0
+                        aline = sys.stdin.readline()
 
-        i, o, e = select.select( [sys.stdin], [], [], windtime )
-        if (i): # received user input
-            shoot = sys.stdin.readline().strip()
-        else: # user input timed out
-            shoot = 'nothing'
+                        # user takes damage
+                        print 'You shot the arrow at ' + str(user.aimer) + '!'
+                        dist = distance(user.aimer,center)
+                        if dist < 1:
+                                print 'Bullseye!'
+                                enemy.lose_health(40) # crit damage
+                                time.sleep(2)
+                                if enemy.health <= 0:
+                                        finish_practice(user)
+                        if dist >= 1 and dist <= 1.5:
+                                print 'Grazing shot. '
+                                enemy.lose_health(15) # grazing damage
+                                time.sleep(2)
+                                if enemy.health <= 0:
+                                        finish_practice(user)
+                        if dist > 1.5:
+                                print 'You missed the target completely. '
+                                time.sleep(2)
+                        #print 'User lost health. '
+                        #user.counter -= 51
+                        show_target(user,enemy)
+                        break
 
-        if shoot == '': #got [return] from user
-            print 'You shot the arrow! at '+ str(user.aimer)
-            thread.cancel()
-            dist = distance(user.aimer,center)
-            print 'Distance from center: ', dist
-            if dist < 1:
-                print 'Bullseye! '
-                enemy.lose_health(20) # crit damage
-                time.sleep(2)
-                if enemy.health <= 0:
-                    finish_practice(user)
-                    #return
-                show_target(user,enemy)
-            if dist  >=1 and dist <= 1.5:
-                print 'Grazing shot '
-                enemy.lose_health(55) # mild hit damage
-                time.sleep(2)
-                if enemy.health <= 0:
-                    finish_practice(user)
-                    #return
-                show_target(user,enemy)
-            if dist > 1.5:
-                print 'You missed the target'
-                time.sleep(2)
-                show_target(user,enemy)
+                anidle += 0.01
+                if anidle > windtime: # time expired to shoot arrow
+                        
+                        print 'User did not lose health. '
+                        show_target(user,enemy)
+                        break
 
 def finish_practice(user):
     user.haybailchamp=True
     print 'You have bested the haybail. '
-    time.sleep(5)
-    #return
+    #time.sleep(5)
+    return
 def didigethere():
     print 'did i get here?'
     time.sleep(5)
