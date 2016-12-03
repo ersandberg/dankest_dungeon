@@ -1,3 +1,4 @@
+#!/usr/local/bin/python
 #Erik Sandberg
 #Classes used in dankest_dungeon.py
 import numpy as np
@@ -24,6 +25,9 @@ class player():
         self.in_dungeon = True
         self.outside = False
         self.superboots = False
+        self.archery = False
+        self.haybailchamp = False
+        self.aimer = [0,0]
 
     def gain_exp(self,value):
         self.exp += value
@@ -71,7 +75,17 @@ class player():
     def add_score(self,points):
         self.score += points
 
-
+class Haybail():
+    def __init__(self):
+        self.name = 'Haybail'
+        self.health = 100
+    def lose_health(self,num):
+        self.health -= num
+        if self.health > 0:
+            print 'Haybail has '+ str(self.health) + ' health remaining.'
+        else:
+            print 'Haybail has been defeated. '
+            
 class Floor():
     def __init__(self,gridsize_x,gridsize_y,number_of_monsters,monster_positions,starting_position,player_position, sensei_position,stair_position):
         self.gridsize_x = gridsize_x
@@ -192,4 +206,6 @@ class Outdoors():
         self.generate(number_obstacles,number_items)
 
         
-        
+#class Target():
+ #   def __init__(self):
+  #      self.gridsize_x = 

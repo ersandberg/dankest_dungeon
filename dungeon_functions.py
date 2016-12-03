@@ -1,11 +1,33 @@
+#!/usr/local/bin/python
 #Erik Sandberg
 #Functions used in dankest_dungeon.py
 import numpy as np
-import sys
+import sys, select
 import time
 import os
+import threading
 from dungeon_classes import *
 obstacle_damage = 15
+
+
+'''# --- From moisesvego on StackOverflow
+import sys, select
+
+print "You have ten seconds to answer!"
+
+i, o, e = select.select( [sys.stdin], [], [], 10 )
+
+if (i):
+  #print "You said", sys.stdin.readline().strip()
+  variable = sys.stdin.readline().strip()
+  print "you said", variable
+else:
+  print "You said nothing!"
+
+'''# --- end of StackOverflow example
+
+
+
 
 def use_stairs(floor,user):
     user.floor += 1
@@ -374,14 +396,151 @@ def running(outdoors,user): # analagous to "move_player" for inside dungeon
             display(outdoors.gridsize_x,outdoors.gridsize_y,outdoors)
             print 'GOTTA GO FAST!'
             time.sleep(0.5)
-        #os.system('clear')
-        #print 'You escaped the evil for good!'
-        #print 'Nice work, Hotshot! '
-        #time.sleep(3)
-        #return #
         leave_outdoors(outdoors,user)
     
 
+#def shooting(target,user):
+    
+    
+
+
+'''def new_restart():
+    re
+def new_show_target(): #trying to make it independent of user variable
+    os.system('clear')
+    aimer = [0,0]
+    print aimer
+    center = [2,2]
+
+    aimer[0] += np.random.randint(-1,2)
+    if aimer[0] < 0:
+        aimer[0] = 0
+    if aimer[0] > 4:
+        aimer[0] = 4
+    aimer[1] += np.random.randint(-1,2)
+    if aimer[1] < 0:
+        aimer[1] = 0
+    if aimer[1] > 4:
+        aimer[1] = 4
+    print aimer    
+    display_arrow(aimer)
+    thread = threading.Timer(2,new_show_target) #if timer finishes, restart
+    thread.start()
+    print '[return] Shoot the arrow!'
+    shoot = raw_input()
+    print 'You shot the arrow!'
+    thread.cancel()
+'''
+def wind(user):
+    randx = np.random.randint(-1,2)
+    randy = np.random.randint(-1,2)
+    user.aimer[0] += randx
+    user.aimer[1] += randy
+    if user.aimer[0] <= -5:
+        user.aimer[0] += np.random.randint(1,3)
+    if user.aimer[0] >= 5:
+        user.aimer[0] -= np.random.randint(1,3)
+    if user.aimer[1] <= 0:
+        user.aimer[1] += np.random.randint(1,3)
+    if user.aimer[1] >= 7:
+        user.aimer[1] -= np.random.randint(1,3)    
+def distance(point1,point2):
+    return np.sqrt((point1[0]-point2[0])**2 + (point1[1] - point2[1])**2)
+
+
+# If True, Give user a chance to press enter
+# If two seconds pass, remove chance, start over
+
+def show_target(user,enemy):
+    if user.haybailchamp == False:
+        wind(user)
+        os.system('clear')
+        display_arrow(user)
+        print user.aimer
+        print str(enemy.name) + ' has ' + str(enemy.health) + ' health. '
+        center = [0,3]
+        windtime = np.random.rand()
+        thread = threading.Timer(windtime,show_target, [user,enemy])
+        thread.start()
+        print ''
+        print ''
+        print '[return] Shoot the arrow! (Only press once, please.)'
+
+
+        i, o, e = select.select( [sys.stdin], [], [], windtime )
+        if (i): # received user input
+            shoot = sys.stdin.readline().strip()
+        else: # user input timed out
+            shoot = 'nothing'
+
+        if shoot == '': #got [return] from user
+            print 'You shot the arrow! at '+ str(user.aimer)
+            thread.cancel()
+            dist = distance(user.aimer,center)
+            print 'Distance from center: ', dist
+            if dist < 1:
+                print 'Bullseye! '
+                enemy.lose_health(20) # crit damage
+                time.sleep(2)
+                if enemy.health <= 0:
+                    finish_practice(user)
+                    #return
+                show_target(user,enemy)
+            if dist  >=1 and dist <= 1.5:
+                print 'Grazing shot '
+                enemy.lose_health(55) # mild hit damage
+                time.sleep(2)
+                if enemy.health <= 0:
+                    finish_practice(user)
+                    #return
+                show_target(user,enemy)
+            if dist > 1.5:
+                print 'You missed the target'
+                time.sleep(2)
+                show_target(user,enemy)
+
+def finish_practice(user):
+    user.haybailchamp=True
+    print 'You have bested the haybail. '
+    time.sleep(5)
+    #return
+def didigethere():
+    print 'did i get here?'
+    time.sleep(5)
+    return
+
+
+
+def display_arrow(user):
+    rows = []
+    row1 = '          """""         '
+    row2 = '        "       "       '
+    row3 = '       "   ...   "      '
+    row4 = '      "    .o.    "     '
+    row5 = '       "   ```   "      '
+    row6 = '        "       "       '
+    row7 = '          """""         '
+    rows.append(row1)
+    rows.append(row2)
+    rows.append(row3)
+    rows.append(row4)# horrid way to do this but can't find different solution
+    rows.append(row5)
+    rows.append(row6)
+    rows.append(row7)     
+    array = rows
+    try:
+        x = user.aimer[0]
+        y = user.aimer[1]
+        listed = list(array[y])
+        listed[x+len(row4)/2] = 'X'
+        array[y] = "".join(listed)
+    except:
+        pass
+    for i in range(len(rows)):
+        print array[i]        
+    
+
+    
 def display(gridsize_x, gridsize_y,floor):
     # create base grid
     top   = ' _ '*floor.gridsize_x

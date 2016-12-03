@@ -1,3 +1,4 @@
+#!/usr/local/bin/python
 #Erik Sandberg
 #Dankest Dungeon story line
 import os
