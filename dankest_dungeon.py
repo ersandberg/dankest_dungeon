@@ -50,15 +50,15 @@ outdoors = Outdoors()
 
 #Initialize the game
 
-#intro()
-user = player(*load_character(character_starting_values).astype(int))
+intro()
+user = player(*load_character(character_starting_values))
 
 user.local_high_score = local_high_score
 os.system('clear')
-user.archery=True # for testing
-user.in_dungeon = False # For testing
-user.outside = False # for testing
-'''
+#user.archery=True # for testing
+#user.in_dungeon = False # For testing
+#user.outside = False # for testing
+
 while user.in_dungeon: # dungeon sequence
     os.system('clear')
     move_player(floor,user)
@@ -67,14 +67,18 @@ while user.outside: # outdoor sequence
     os.system('clear')
     running(outdoors,user)
 archery_intro()    
-'''
+
 #while user.archery:
 haybail = Haybail()
-show_target(user,haybail)
+while user.haybailchamp == False:
+
+    show_target(user,haybail)
+
 print 'DID I GET HERE'
 time.sleep(3)
 if user.haybailchamp:
-    os.system('clear')
+    #os.system('clear')
     print 'GAME OVER'
-    time.sleep(3)        
+    time.sleep(3)
+    #running(user,outdoors)
 
