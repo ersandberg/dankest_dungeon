@@ -51,16 +51,15 @@ haybail = Haybail()
 
 
 #Initialize the game
+intro()
 
-#intro()
 user = player(*load_character(character_starting_values))
 
 user.local_high_score = local_high_score
 os.system('clear')
-user.archery=True # for testing
-user.in_dungeon = False # For testing
-user.outside = False # for testing
-'''
+#user.archery=True # for testing
+#user.in_dungeon = False # For testing
+#user.outside = False # for testing
 while user.in_dungeon: # dungeon sequence
     os.system('clear')
     move_player(floor,user)
@@ -69,12 +68,6 @@ while user.outside: # outdoor sequence
     os.system('clear')
     running(outdoors,user)
 archery_intro()    
-'''
-
-
-
-
-
 show_target(user,haybail)
 # got past the haybail
 os.system('clear')

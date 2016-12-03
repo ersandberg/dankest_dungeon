@@ -300,10 +300,10 @@ def grab_item(outdoors,user):
     if r < .7:
         user.gain_money(1)
         print 'The item was a gold piece! Not bad!'
-    if r >= .7 and r <= .9:
+    if r >= .7 and r <= .85:
         user.health_potions += 1
         print 'The item was a health potion! Nice!'
-    if r > .9:
+    if r > .85:
         user.superboots = True
         print 'YOU FOUND SUPERBOOTS! You can easily escape now!'
     time.sleep(2)
@@ -323,10 +323,11 @@ def running(outdoors,user): # analagous to "move_player" for inside dungeon
     print ''
     print ''
     print 'What would you like to do?'
+    print '[return] Stay'
     print '[w] Move up  '
     print '[s] Move down'
     print '[d] Jump     '
-    print '[return] Stay'
+    print '[p] Use Potion'
     if user.superboots:
         print '[B] Use superboots to outrun the evil!'
     
@@ -338,7 +339,13 @@ def running(outdoors,user): # analagous to "move_player" for inside dungeon
         item_num = 0
 
     move = raw_input()
-
+    if move == 'p' or move == 'P':
+        if user.health_potions and user.health !=100:
+            user.gain_health(20) # value of health potion
+            user.lose_health_potion(1)
+        else:
+            print 'Failed to use health potion. (Either no health potions or you are at max health.)'
+        time.sleep(2)
     if move == '':
         outdoors.advance_terrain(obst_num,item_num) # create obstacles & items      
         if outdoors.player_position in outdoors.item_locations:
@@ -461,7 +468,7 @@ def show_target(user,enemy):
         windtime = np.random.rand()
         print ''
         print ''
-        print '[return] Shoot the arrow! '
+        print '[return] Shoot the arrow! (Only press once, please). '
         
         while enemy.health > 0:
                 time.sleep(0.01)

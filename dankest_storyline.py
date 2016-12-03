@@ -70,6 +70,16 @@ def archery_intro():
             print "I'll teach you how, friendly friend! "
             archery3()
             p()
+            print 'Just press the [return] button to shoot the arrow. '
+            archery3()
+            p()
+            print 'The wind is blowing strong today though... It might be hard to aim. '
+            archery3()
+            p()
+            print 'Try to hit the bullseye or spots just around it! '
+            archery3()
+            p()
+        
 def archery():
     print ''
     print '        '
