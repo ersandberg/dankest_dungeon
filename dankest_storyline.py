@@ -3,6 +3,7 @@
 #Dankest Dungeon story line
 import os
 import time
+from dungeon_functions import clear
 
 def p(): # press a key
     print ''
@@ -14,10 +15,10 @@ def p(): # press a key
     print ''
     print 'Press [return] to continue'
     key = raw_input()
-    os.system('clear')
+    clear()
 
 def archery_intro():
-    os.system('clear')
+    clear()
     print "Your superboots run out of juice, but fortunately you're safe now. "
     archery()
     p()
@@ -37,7 +38,7 @@ def archery_intro():
     
     choice = ''
     while choice == '' or choice == '1' or choice == '2':
-        os.system('clear')
+        clear()
         print "Perhaps I could invite you to play robo boogie?"
         archery2()
         print ''
@@ -53,17 +54,17 @@ def archery_intro():
         #p()
         choice = raw_input()
         if choice == '1':
-            os.system('clear')
+            clear()
             print 'Robo boogie is what humans call "archery", I *boop* believe.'
             archery2()
             p()
         if choice == '2':
-            os.system('clear')
+            clear()
             print 'My name is *beep* ! '
             archery3()
             p()
         if choice == '3':
-            os.system('clear')
+            clear()
             print '*BEEP BOOP* "YAY!"'
             archery3()
             p()
@@ -188,7 +189,7 @@ def building4():
     print '[   .    |.|  / l   |-                   /|\     '
     print '[________|_|_/   l   _-  , . .   V.  ,   / l.  i '    
 def outside_intro():
-    os.system('clear')
+    clear()
     building()
     p()
     print 'You burst open the dungeon door. A beam of light hits your face'
@@ -206,7 +207,7 @@ def outside_intro():
     
 
 def intro():
-    os.system('clear')
+    clear()
     print 'Ouch... my head really hurts...'
     print ''
     print ''

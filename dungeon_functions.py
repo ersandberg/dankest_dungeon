@@ -10,23 +10,12 @@ from dungeon_classes import *
 obstacle_damage = 15
 
 
-'''# --- From pontus on StackOverflow
-import sys, select
-
-print "You have ten seconds to answer!"
-
-i, o, e = select.select( [sys.stdin], [], [], 10 )
-
-if (i):
-  #print "You said", sys.stdin.readline().strip()
-  variable = sys.stdin.readline().strip()
-  print "you said", variable
-else:
-  print "You said nothing!"
-
-'''# --- end of StackOverflow example
-
-
+def clear():
+    name = os.name
+    if name == 'posix':
+        os.system('clear')
+    else:
+        os.system('cls')
 
 
 def use_stairs(floor,user):
@@ -48,10 +37,10 @@ def use_stairs(floor,user):
         floor.door_position = [0,0]
         floor.monster_positions = [[0,0]]
     
-    os.system('clear')
+    clear()
 
     #time.sleep(2)
-    os.system('clear')
+    clear()
     # animation
     draw('Stairs',user) 
     time.sleep(2)
@@ -59,7 +48,7 @@ def use_stairs(floor,user):
 
     
 def use_sensei(user):
-    os.system('clear')
+    clear()
     header(user)
     draw('Sensei',user)
     sensei = Sensei(3,1,1)
@@ -108,7 +97,7 @@ def fight(floor,user):
     if user.floor == 5: # boss
         enemy = monster(*floor.monster_list[-1])
     while True:
-        os.system('clear')
+        clear()
         header(user)
         print 'You are fighting a ' + str(enemy.name) + '!'
         print str(enemy.name) + ' has ' + str(enemy.health) + ' health!'
@@ -151,7 +140,7 @@ def fight(floor,user):
             return user
             
         if enemy.health <= 0: # defeated enemy
-            os.system('clear')
+            clear()
             header(user)
             print 'Enemy killed!'
             print 'You gained ' + str(enemy.value) + ' gold!'
@@ -237,7 +226,7 @@ def move_player(floor,user):
         else:
             print "You hit a wall... Try again. "
             time.sleep(2)
-            os.system('clear')
+            clear()
             move_player(floor,user)
             
     if move == 'd' or move == 'D': # right
@@ -255,7 +244,7 @@ def move_player(floor,user):
         else:
             print "That's a WALL, numbskull! Try again. "
             time.sleep(2)
-            os.system('clear')
+            clear()
             move_player(floor,user)
             
     if move == 'w' or move == 'W': # up
@@ -273,7 +262,7 @@ def move_player(floor,user):
         else:
             print "Another wall. Rats! Try again. "
             time.sleep(2)
-            os.system('clear')
+            clear()
             move_player(floor,user)
     if move == 's' or move == 'S': # down
         if floor.player_position[1] != floor.gridsize_y-1:
@@ -290,7 +279,7 @@ def move_player(floor,user):
         else:
             print "You realize you're trying to walk through a wall, right? Try again. "
             time.sleep(2)
-            os.system('clear')
+            clear()
             move_player(floor,user)
 
 def grab_item(outdoors,user):
@@ -364,7 +353,7 @@ def running(outdoors,user): # analagous to "move_player" for inside dungeon
         else:
             print "Can't go out of bounds! Try again. "
             time.sleep(2)
-            os.system('clear')
+            clear()
             running(outdoors,user)
 
             
@@ -381,7 +370,7 @@ def running(outdoors,user): # analagous to "move_player" for inside dungeon
         else:
             print "You realize you're trying to walk out of bounds, right? Try again. "
             time.sleep(2)
-            os.system('clear')
+            clear()
             running(outdoors,user)
         
 
@@ -397,7 +386,7 @@ def running(outdoors,user): # analagous to "move_player" for inside dungeon
         while outdoors.player_position[0] < outdoors.gridsize_x-1:
             outdoors.player_position[0] +=1
             outdoors.advance_terrain(0,0)
-            os.system('clear')
+            clear()
             header(user)
             outdoors_legend(user)
             display(outdoors.gridsize_x,outdoors.gridsize_y,outdoors)
@@ -414,7 +403,7 @@ def running(outdoors,user): # analagous to "move_player" for inside dungeon
 '''def new_restart():
     re
 def new_show_target(): #trying to make it independent of user variable
-    os.system('clear')
+    clear()
     aimer = [0,0]
     print aimer
     center = [2,2]
@@ -460,7 +449,7 @@ def distance(point1,point2):
 def show_target(user,enemy):
         anidle = 0.0
         wind(user)
-        os.system('clear')
+        clear()
         display_arrow(user)
         print user.aimer
         print str(enemy.name) + ' has ' + str(enemy.health) + ' health. '
@@ -656,7 +645,7 @@ def draw(name,user): # name_of_monster= enemy.name
         print ' /|\    ____'
         print '_/ l___|    '
         time.sleep(1.5)
-        os.system('clear')
+        clear()
         print 'You stumbled upon a raggedy staircase. You naively decide to ascend.'
         print '                   '
         print '                   '
@@ -666,7 +655,7 @@ def draw(name,user): # name_of_monster= enemy.name
         print '        _/ l__|    '    
         print '_______|'
         time.sleep(1.5)
-        os.system('clear')
+        clear()
         print 'You stumbled upon a raggedy staircase. You naively decide to ascend.'
         print '                             '
         print '                             '
@@ -677,7 +666,7 @@ def draw(name,user): # name_of_monster= enemy.name
         print '_______|'
         print ''
         time.sleep(1.5)
-        os.system('clear')
+        clear()
         print 'You stumbled upon a raggedy staircase. You naively decide to ascend.'
         print '                             __ '
         print '                       o    |  |'
@@ -760,7 +749,7 @@ def draw(name,user): # name_of_monster= enemy.name
         print '                      '
         print '                      '
     if name == 'Instructions':
-        os.system('clear')
+        clear()
         print 'GOAL: Get to floor five and escape the dungeon. '
         print 'You will need to get stronger to leave the fifth floor. '
         print 'Fight monsters to get stronger. '
@@ -772,14 +761,14 @@ def draw(name,user): # name_of_monster= enemy.name
         print ' '
         
 def leave_outdoors(floor,user):
-    os.system('clear')
+    clear()
     header(user)
     print 'You were able to escape from the giant. '
     time.sleep(2)
     user.outside=False
     user.archery=True
 def leave_dungeon(floor,user):
-    os.system('clear')
+    clear()
     header(user)
     print 'You make it out of the dungeon alive'
     time.sleep(2)
@@ -808,21 +797,21 @@ def victory(user):
     #np.savetxt('character_save.txt', ) delete character save file
     np.savetxt('local_high_score.txt', [user.score])
     time.sleep(3)
-    os.system('clear')
+    clear()
     sys.exit()
 def endgame(user):
-    os.system('clear')
+    clear()
     print 'You ran out of health.'
     print 'GAME'
     print 'OVER'
     print 'High score: ', user.score
     time.sleep(3)
     np.savetxt('local_high_score.txt', [user.score])
-    os.system('clear')
+    clear()
     sys.exit()
 
 def load_character(character_starting_values):
-    os.system('clear')
+    clear()
     print ' T H E   D A N K E S T   D U N G E O N '
     print '----------------'
     print 'Would you like to load a saved character?'

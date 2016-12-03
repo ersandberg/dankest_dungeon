@@ -56,25 +56,27 @@ intro()
 user = player(*load_character(character_starting_values))
 
 user.local_high_score = local_high_score
-os.system('clear')
+clear()
 #user.archery=True # for testing
 #user.in_dungeon = False # For testing
 #user.outside = False # for testing
+
 while user.in_dungeon: # dungeon sequence
-    os.system('clear')
+    clear()
     move_player(floor,user)
 outside_intro()
 while user.outside: # outdoor sequence
-    os.system('clear')
+    clear()
     running(outdoors,user)
 archery_intro()    
+
 show_target(user,haybail)
 # got past the haybail
-os.system('clear')
+clear()
 print 'YOU ARE THE HAYBAIL CHAMP!'
 time.sleep(3)
 if user.haybailchamp:
-    #os.system('clear')
+    #clear()
     print 'GAME OVER'
     time.sleep(3)
     #running(user,outdoors)
