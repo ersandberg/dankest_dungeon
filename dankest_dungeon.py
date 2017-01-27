@@ -7,7 +7,6 @@ import os
 from dungeon_classes import *
 from dungeon_functions import *
 from dankest_storyline import *
-#from test.py import *
 
 
 # define character attributes

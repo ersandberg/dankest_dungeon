@@ -13,7 +13,7 @@ def p(): # press a key
     print ''
     print ''
     print ''
-    print 'Press [return] to continue'
+    print 'Press [return] to continue.'
     key = raw_input()
     clear()
 
@@ -25,10 +25,10 @@ def archery_intro():
     print 'Up ahead a ways you see a small archery range.'
     archery1()
     p()
-    print 'A robot greets you. *beep bop* '
+    print 'A robot greets you. *beep bop*'
     archery2()
     p()
-    print '*beep* "Hello, traveler. No one has come to visit me for many years. "'
+    print '*beep* Hello, traveler. No one has come to visit me for many years. '
     archery2()
     p()
     print  "*boop* I would love to make a new friend. *bop*"
@@ -60,12 +60,12 @@ def archery_intro():
             p()
         if choice == '2':
             clear()
-            print 'My name is *beep* ! '
+            print 'My name is "beep"! '
             archery3()
             p()
         if choice == '3':
             clear()
-            print '*BEEP BOOP* "YAY!"'
+            print '*BEEP BOOP* YAY!'
             archery3()
             p()
             print "I'll teach you how, friendly friend! "
@@ -192,7 +192,7 @@ def outside_intro():
     clear()
     building()
     p()
-    print 'You burst open the dungeon door. A beam of light hits your face'
+    print 'You burst open the dungeon door. A beam of light hits your face.'
     building2()
     p()
     print "You shield your eyes from the harsh sun. You've made it outside. "
@@ -262,18 +262,18 @@ def intro():
     p()
     print 'The floor is tile. Feels like some sort of dungeon.'
     p()
-    print '"The dank dungeon. "'
+    print '"The dank dungeon".'
     p()
     print 'Hehehe.. '
     p()
-    print 'Oooh! The "Dankest_dungeon" '
+    print 'Oooh! The "Dankest dungeon".'
     p()
     print "Yeah, yeah. That's got a nice ring to it. "
     p()
     print 'I suppose I should light a match, huh? '
     p()
     time.sleep(2)
-    print ' T H E   D A N K E S T   D U N G E O N '
+    print ' --->  T H E   D A N K E S T   D U N G E O N  <---'
     time.sleep(3)
 
 def cliffs():

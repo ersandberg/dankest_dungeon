@@ -205,7 +205,7 @@ def move_player(floor,user):
             sys.exit()
 
     if move == 'x' or move == 'X': # save
-        np.savetxt('character_save.txt',[user.level,user.health,user.damage,user.defense,user.money,user.health_potions,user.floor,user.score,user.exp,user.maxexp,user.keys,user.local_high_score])
+        np.savetxt('character_save.txt',[user.level,user.health,user.damage,user.defense,user.money,user.health_potions,user.floor,user.score,user.exp,user.maxexp,user.keys])
         #np.savetxt('floor_save.txt', [floor.gridsize_x,floor.gridsize_y,floor.number_of_monsters,floor.monster_positions,floor.starting_position,floor.player_position,floor.sensei_position,floor.stair_position]) # attempt to save floor
         print 'Save successful'
         time.sleep(2)
@@ -305,7 +305,7 @@ def hit_obstacle(outdoors,user):
 def running(outdoors,user): # analagous to "move_player" for inside dungeon
     header(user)
     outdoors_legend(user)
-    display(outdoors.gridsize_x,outdoors.gridsize_y,outdoors)
+    display(outdoors.gridsize_x,outdoors.gridsize_y,outdoors, symbol = ' _ ')
     print 'You are on the run from evil! '
     print 'You can now jump over obstacles. '
     print 'Pick up objects while running, or just escape! '
@@ -389,44 +389,12 @@ def running(outdoors,user): # analagous to "move_player" for inside dungeon
             clear()
             header(user)
             outdoors_legend(user)
-            display(outdoors.gridsize_x,outdoors.gridsize_y,outdoors)
+            display(outdoors.gridsize_x,outdoors.gridsize_y,outdoors, symbol=' _ ')
             print 'GOTTA GO FAST!'
             time.sleep(0.5)
         leave_outdoors(outdoors,user)
     
 
-#def shooting(target,user):
-    
-    
-
-
-'''def new_restart():
-    re
-def new_show_target(): #trying to make it independent of user variable
-    clear()
-    aimer = [0,0]
-    print aimer
-    center = [2,2]
-
-    aimer[0] += np.random.randint(-1,2)
-    if aimer[0] < 0:
-        aimer[0] = 0
-    if aimer[0] > 4:
-        aimer[0] = 4
-    aimer[1] += np.random.randint(-1,2)
-    if aimer[1] < 0:
-        aimer[1] = 0
-    if aimer[1] > 4:
-        aimer[1] = 4
-    print aimer    
-    display_arrow(aimer)
-    thread = threading.Timer(2,new_show_target) #if timer finishes, restart
-    thread.start()
-    print '[return] Shoot the arrow!'
-    shoot = raw_input()
-    print 'You shot the arrow!'
-    thread.cancel()
-'''
 def wind(user):
     randx = np.random.randint(-1,2)
     randy = np.random.randint(-1,2)
@@ -454,7 +422,7 @@ def show_target(user,enemy):
         print user.aimer
         print str(enemy.name) + ' has ' + str(enemy.health) + ' health. '
         center = [0,3]
-        windtime = np.random.rand()
+        windtime = np.random.rand()/2.
         print ''
         print ''
         print '[return] Shoot the arrow! (Only press once, please). '
@@ -467,8 +435,8 @@ def show_target(user,enemy):
                         anidle = 0.0
                         aline = sys.stdin.readline()
 
-                        # user takes damage
-                        print 'You shot the arrow at ' + str(user.aimer) + '!'
+                        # enemy takes damage
+                        #print 'You shot the arrow at ' + str(user.aimer) + '!'
                         dist = distance(user.aimer,center)
                         if dist < 1:
                                 print 'Bullseye!'
@@ -539,10 +507,10 @@ def display_arrow(user):
     
 
     
-def display(gridsize_x, gridsize_y,floor):
+def display(gridsize_x, gridsize_y,floor, symbol = '|_|'):
     # create base grid
     top   = ' _ '*floor.gridsize_x
-    row   = '|_|'*floor.gridsize_x
+    row   = symbol*floor.gridsize_x
     array = []
     for i in range(floor.gridsize_y):
         array.append(row)
@@ -553,7 +521,7 @@ def display(gridsize_x, gridsize_y,floor):
             y = position[1]
 
             listed = list(array[y])
-            listed[3*x+1] = 'A'
+            listed[3*x+1] = '0'
             if x < 1: #do not display if at x=0, cannot hit that obstacle
                 listed[3*x+1] = '_'
             array[y] = "".join(listed)
@@ -824,7 +792,7 @@ def load_character(character_starting_values):
         return load_character(character_starting_values)
     if yes_or_no == 'y' or yes_or_no == 'Y':
         try:
-            character = np.loadtxt('character_save.txt')
+            character = (np.loadtxt('character_save.txt')).astype(int)
             print 'Loading saved character. '
             return character
         except:

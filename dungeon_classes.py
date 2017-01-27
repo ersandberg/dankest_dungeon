@@ -27,7 +27,7 @@ class player():
         self.superboots = False
         self.archery = False
         self.haybailchamp = False
-        self.aimer = [0,0]
+        self.aimer = [np.random.randint(-3,4),3+np.random.randint(-3,4)]
 
     def gain_exp(self,value):
         self.exp += value
@@ -45,12 +45,15 @@ class player():
         print 'You lost ' + str(loss_of_health-self.defense) + ' health. '
         
     def gain_health(self,gain_of_health):
-        if self.health == 100:
+        self.health += gain_of_health
+        if self.health >= 100:
             print 'You are at max health!'
             time.sleep(2)
+            self.health = 100
+            print 'You healed for ' + str(100-gain_of_health)
             return
-        self.health += gain_of_health
-        print 'You healed for ' + str(gain_of_health)
+        else:
+            print 'You healed for ' + str(gain_of_health)
         print 'Current health is now '+ str(self.health)
 
     def gain_money(self,gain_of_money):
